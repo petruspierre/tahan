@@ -1,6 +1,4 @@
-import React, {
-  createContext, useState, useEffect, useContext,
-} from 'react';
+import React, { createContext, useState, useEffect, useContext } from 'react';
 import { GoogleSignin } from '@react-native-community/google-signin';
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -15,10 +13,11 @@ export const AuthProvider = ({ children }) => {
 
   async function signIn() {
     const response = await auth.signIn();
-    const { accessToken } = await GoogleSignin.getTokens()
+    const { accessToken } = await GoogleSignin.getTokens();
     setUser(response.user);
+    console.log(accessToken);
 
-    //api.defaults.headers.Authorization = `Bearer ${response.token}`;
+    // api.defaults.headers.Authorization = `Bearer ${response.token}`;
 
     await AsyncStorage.setItem('@Tahan:user', JSON.stringify(response.user));
     await AsyncStorage.setItem('@Tahan:token', accessToken);
@@ -46,9 +45,14 @@ export const AuthProvider = ({ children }) => {
   });
 
   return (
-    <AuthContext.Provider value={{
-      signed: !!user, user, signIn, signOut, loading,
-    }}
+    <AuthContext.Provider
+      value={{
+        signed: !!user,
+        user,
+        signIn,
+        signOut,
+        loading,
+      }}
     >
       {children}
     </AuthContext.Provider>
