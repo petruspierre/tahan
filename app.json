@@ -1,0 +1,12 @@
+{
+  "name": "tahan",
+  "displayName": "tahan",
+  "expo": {
+    "name": "tahan",
+    "slug": "tahan",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
