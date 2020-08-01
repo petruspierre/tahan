@@ -9,6 +9,8 @@ import Home from '../pages/Home';
 import Quizzes from '../pages/Quizzes';
 import Profile from '../pages/Profile';
 
+import { BottomDecoration, TopDecoration } from '../components';
+
 const AppStack = createStackNavigator();
 
 const Tab = createMaterialTopTabNavigator();
@@ -56,42 +58,58 @@ function ProfileIcon({ fill }) {
 
 function TabBar({ state, descriptors, navigation, position }) {
   return (
-    <View
-      style={{ flexDirection: 'row', height: 90, backgroundColor: '#E4E0E0' }}
-    >
-      {state.routes.map((route, index) => {
-        const { options } = descriptors[route.key];
+    <>
+      <View
+        style={{
+          flexDirection: 'row',
+          height: 100,
+          backgroundColor: '#E4E0E0',
+        }}
+      >
+        {state.routes.map((route, index) => {
+          const { options } = descriptors[route.key];
 
-        const isFocused = state.index === index;
+          const isFocused = state.index === index;
 
-        const icon = options.tabBarIcon;
+          const icon = options.tabBarIcon;
 
-        const onPress = () => {
-          const event = navigation.emit({
-            type: 'tabPress',
-            target: route.key,
-            canPreventDefault: true,
-          });
+          const onPress = () => {
+            const event = navigation.emit({
+              type: 'tabPress',
+              target: route.key,
+              canPreventDefault: true,
+            });
 
-          if (!isFocused && !event.defaultPrevented) {
-            navigation.navigate(route.name);
-          }
-        };
+            if (!isFocused && !event.defaultPrevented) {
+              navigation.navigate(route.name);
+            }
+          };
 
-        return (
-          <TouchableOpacity
-            accessibilityRole="button"
-            accessibilityStates={isFocused ? ['selected'] : []}
-            accessibilityLabel={options.tabBarAccessibilityLabel}
-            testID={options.tabBarTestID}
-            onPress={onPress}
-            style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-          >
-            {!isFocused ? icon : React.cloneElement(icon, { fill: '#FF3358' })}
-          </TouchableOpacity>
-        );
-      })}
-    </View>
+          return (
+            <TouchableOpacity
+              accessibilityRole="button"
+              accessibilityStates={isFocused ? ['selected'] : []}
+              accessibilityLabel={options.tabBarAccessibilityLabel}
+              testID={options.tabBarTestID}
+              onPress={onPress}
+              style={{
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginBottom: 18,
+              }}
+            >
+              {!isFocused
+                ? icon
+                : React.cloneElement(icon, { fill: '#FF3358' })}
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+      <View style={{ width: '100%', alignItems: 'center' }}>
+        <BottomDecoration />
+      </View>
+    </>
   );
 }
 

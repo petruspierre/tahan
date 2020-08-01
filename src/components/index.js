@@ -1,3 +1,5 @@
 import Background from './Background';
+import BottomDecoration from './BottomDecoration';
+import TopDecoration from './TopDecoration';
 
-export { Background };
+export { Background, BottomDecoration, TopDecoration };

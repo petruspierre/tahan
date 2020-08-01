@@ -34,5 +34,6 @@ module.exports = {
     'no-console': 'off',
     'no-use-before-define': 'off',
     'no-nested-ternary': 'off',
+    'react/style-prop-object': 'off',
   },
 };

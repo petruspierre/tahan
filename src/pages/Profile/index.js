@@ -1,10 +1,14 @@
 import React from 'react';
 import { View } from 'react-native';
 
-// import { Container } from './styles';
+import { TopDecoration } from '../../components';
 
 const Profile = () => {
-  return <View />;
+  return (
+    <View>
+      <TopDecoration title="PERFIL" />
+    </View>
+  );
 };
 
 export default Profile;

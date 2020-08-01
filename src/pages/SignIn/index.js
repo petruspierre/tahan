@@ -59,12 +59,7 @@ const SignIn = () => {
 
   return (
     <>
-      <StatusBar
-        // eslint-disable-next-line react/style-prop-object
-        style="light"
-        backgroundColor="#FF3358"
-        translucent={false}
-      />
+      <StatusBar style="light" backgroundColor="#FF3358" translucent={false} />
       <Background />
       <View style={styles.container}>
         <View style={styles.decorationTop1} />
