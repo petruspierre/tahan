@@ -3,7 +3,7 @@ import { GoogleSignin } from '@react-native-community/google-signin';
 import AsyncStorage from '@react-native-community/async-storage';
 
 import * as auth from '../services/auth';
-// import api from '../services/api';
+import api from '../services/api';
 
 const AuthContext = createContext({});
 
@@ -12,17 +12,29 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   async function signIn() {
-    const response = await auth.signIn();
-    if (response) {
-      console.log(response);
-      const { accessToken } = await GoogleSignin.getTokens();
-      // console.log(accessToken);
+    const googleResponse = await auth.signIn();
+    if (googleResponse) {
+      try {
+        const { accessToken } = await GoogleSignin.getTokens();
 
-      // api.defaults.headers.Authorization = `Bearer ${response.token}`;
+        const data = {
+          access_token: accessToken,
+          occupation: 'student',
+        };
 
-      await AsyncStorage.setItem('@Tahan:user', JSON.stringify(response.user));
-      await AsyncStorage.setItem('@Tahan:token', accessToken);
-      setUser(response.user);
+        const response = await api.post('users/sign-in', data);
+
+        api.defaults.headers.Authorization = `Bearer ${response.data.login_token}`;
+
+        await AsyncStorage.setItem(
+          '@Tahan:user',
+          JSON.stringify(response.data.user)
+        );
+        await AsyncStorage.setItem('@Tahan:token', accessToken);
+        setUser(response.data.user);
+      } catch (err) {
+        console.error(err);
+      }
     }
   }
 
@@ -39,10 +51,10 @@ export const AuthProvider = ({ children }) => {
       const storagedToken = await AsyncStorage.getItem('@Tahan:token');
 
       if (storagedUser && storagedToken) {
-        setLoading(false);
         setUser(JSON.parse(storagedUser));
-        // api.defaults.headers.Authorization = `Bearer ${storagedToken}`;
+        api.defaults.headers.Authorization = `Bearer ${storagedToken}`;
       }
+      setLoading(false);
     }
     loadStorageData();
   });
