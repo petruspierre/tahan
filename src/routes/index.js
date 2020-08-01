@@ -1,6 +1,11 @@
+/* eslint-disable camelcase */
 import React from 'react';
 import { View, ActivityIndicator } from 'react-native';
-import { useFonts, RobotoSlab_400Regular, RobotoSlab_700Bold } from '@expo-google-fonts/roboto-slab'
+import {
+  useFonts,
+  RobotoSlab_400Regular,
+  RobotoSlab_700Bold,
+} from '@expo-google-fonts/roboto-slab';
 import { GoogleSignin } from '@react-native-community/google-signin';
 
 import { useAuth } from '../contexts/auth';
@@ -11,7 +16,8 @@ import AppRoutes from './app.routes';
 const Routes = () => {
   const { signed, loading } = useAuth();
   const [fontsLoaded] = useFonts({
-    RobotoSlab_400Regular, RobotoSlab_700Bold
+    RobotoSlab_400Regular,
+    RobotoSlab_700Bold,
   });
 
   GoogleSignin.configure();

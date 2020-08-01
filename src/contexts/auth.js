@@ -3,7 +3,7 @@ import { GoogleSignin } from '@react-native-community/google-signin';
 import AsyncStorage from '@react-native-community/async-storage';
 
 import * as auth from '../services/auth';
-import api from '../services/api';
+// import api from '../services/api';
 
 const AuthContext = createContext({});
 
@@ -13,14 +13,17 @@ export const AuthProvider = ({ children }) => {
 
   async function signIn() {
     const response = await auth.signIn();
-    const { accessToken } = await GoogleSignin.getTokens();
-    setUser(response.user);
-    console.log(accessToken);
+    if (response) {
+      console.log(response);
+      const { accessToken } = await GoogleSignin.getTokens();
+      // console.log(accessToken);
 
-    // api.defaults.headers.Authorization = `Bearer ${response.token}`;
+      // api.defaults.headers.Authorization = `Bearer ${response.token}`;
 
-    await AsyncStorage.setItem('@Tahan:user', JSON.stringify(response.user));
-    await AsyncStorage.setItem('@Tahan:token', accessToken);
+      await AsyncStorage.setItem('@Tahan:user', JSON.stringify(response.user));
+      await AsyncStorage.setItem('@Tahan:token', accessToken);
+      setUser(response.user);
+    }
   }
 
   async function signOut() {
@@ -36,10 +39,10 @@ export const AuthProvider = ({ children }) => {
       const storagedToken = await AsyncStorage.getItem('@Tahan:token');
 
       if (storagedUser && storagedToken) {
+        setLoading(false);
         setUser(JSON.parse(storagedUser));
-        api.defaults.headers.Authorization = `Bearer ${storagedToken}`;
+        // api.defaults.headers.Authorization = `Bearer ${storagedToken}`;
       }
-      setLoading(false);
     }
     loadStorageData();
   });

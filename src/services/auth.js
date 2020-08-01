@@ -10,7 +10,6 @@ export async function signIn() {
     userInfo = await GoogleSignin.signIn();
     return userInfo;
   } catch (error) {
-    console.error('oxe')
     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
       // user cancelled the login flow
     } else if (error.code === statusCodes.IN_PROGRESS) {
