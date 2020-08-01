@@ -94,7 +94,7 @@ const Home = () => {
                 text = text[text.length - 1];
                 setCode4(text);
                 if (text !== '') {
-                  console.log('terminou');
+                  // do-something
                 }
               }}
             />
