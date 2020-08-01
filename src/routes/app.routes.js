@@ -9,7 +9,7 @@ import Home from '../pages/Home';
 import Quizzes from '../pages/Quizzes';
 import Profile from '../pages/Profile';
 
-import { BottomDecoration, TopDecoration } from '../components';
+import { BottomDecoration } from '../components';
 
 const AppStack = createStackNavigator();
 
@@ -56,7 +56,7 @@ function ProfileIcon({ fill }) {
   );
 }
 
-function TabBar({ state, descriptors, navigation, position }) {
+function TabBar({ state, descriptors, navigation }) {
   return (
     <>
       <View
@@ -98,6 +98,7 @@ function TabBar({ state, descriptors, navigation, position }) {
                 alignItems: 'center',
                 marginBottom: 18,
               }}
+              key={String(index)}
             >
               {!isFocused
                 ? icon
