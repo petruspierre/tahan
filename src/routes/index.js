@@ -1,6 +1,5 @@
 /* eslint-disable camelcase */
 import React, { useEffect } from 'react';
-import { View, ActivityIndicator } from 'react-native';
 import {
   useFonts,
   RobotoSlab_400Regular,

@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, TextInput } from 'react-native';
+import { RectButton } from 'react-native-gesture-handler';
 
 import { TopDecoration } from '../../components';
 
@@ -20,7 +21,7 @@ const Home = () => {
       <View style={styles.container}>
         <TopDecoration title="JOGAR" />
 
-        <View style={styles.joinContainer}>
+        <View style={[styles.joinContainer, styles.mediumShadow]}>
           <View
             style={{
               flexDirection: 'row',
@@ -100,6 +101,10 @@ const Home = () => {
             />
           </View>
         </View>
+
+        <RectButton style={[styles.createRoomContainer, styles.mediumShadow]}>
+          <Text style={styles.createRoomText}>Criar sala</Text>
+        </RectButton>
       </View>
     </>
   );

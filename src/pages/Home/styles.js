@@ -42,6 +42,31 @@ const styles = StyleSheet.create({
     marginTop: 16,
     justifyContent: 'space-between',
   },
+  createRoomContainer: {
+    width: '70%',
+    marginTop: 24,
+    backgroundColor: '#F73F60',
+    borderRadius: 10,
+    padding: 32,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  createRoomText: {
+    fontSize: 30,
+    fontFamily: 'RobotoSlab_700Bold',
+    color: 'white',
+  },
+  mediumShadow: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.36,
+    shadowRadius: 6.68,
+
+    elevation: 8,
+  },
 });
 
 export default styles;
