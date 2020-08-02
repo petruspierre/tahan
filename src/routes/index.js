@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, ActivityIndicator } from 'react-native';
 import {
   useFonts,
@@ -7,6 +7,7 @@ import {
   RobotoSlab_700Bold,
 } from '@expo-google-fonts/roboto-slab';
 import { GoogleSignin } from '@react-native-community/google-signin';
+import * as SplashScreen from 'expo-splash-screen';
 
 import { useAuth } from '../contexts/auth';
 
@@ -22,14 +23,18 @@ const Routes = () => {
 
   GoogleSignin.configure();
 
-  if (loading && !fontsLoaded) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" color="#666" />
-      </View>
-    );
-  }
+  useEffect(() => {
+    async function keepSplash() {
+      await SplashScreen.hideAsync();
+    }
 
+    keepSplash();
+  });
+
+  if (loading && !fontsLoaded) {
+    return null;
+  }
+  SplashScreen.hideAsync();
   return signed ? <AppRoutes /> : <AuthRoutes />;
 };
 
