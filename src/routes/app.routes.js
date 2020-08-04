@@ -8,6 +8,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import Home from '../pages/Home';
 import Quizzes from '../pages/Quizzes';
 import Profile from '../pages/Profile';
+import Topics from '../pages/Topics';
 
 import { BottomDecoration } from '../components';
 
@@ -52,6 +53,17 @@ function ProfileIcon({ fill }) {
       />
       <Circle cx={32.535} cy={9.569} r={9.569} fill={fill} />
       <Circle cx={14.672} cy={17.224} r={7.017} fill={fill} />
+    </Svg>
+  );
+}
+
+function TopicsIcon({ fill }) {
+  return (
+    <Svg width={38} height={38} viewBox="0 0 38 38" fill="none">
+      <Path
+        d="M0 5.7v26.6C0 36.482 3.787 38 6.333 38H38v-3.8H6.359c-.976-.023-2.137-.369-2.137-1.9s1.161-1.877 2.137-1.9H38V3.8C38 1.704 36.106 0 33.778 0H6.333C3.787 0 0 1.518 0 5.7z"
+        fill={fill}
+      />
     </Svg>
   );
 }
@@ -134,6 +146,11 @@ function TabRoutes() {
         options={{ tabBarIcon: <QuizIcon fill="#C2A4B6" /> }}
         name="Quizzes"
         component={Quizzes}
+      />
+      <Tab.Screen
+        options={{ tabBarIcon: <TopicsIcon fill="#C2A4B6" /> }}
+        name="Tópicos"
+        component={Topics}
       />
     </Tab.Navigator>
   );
