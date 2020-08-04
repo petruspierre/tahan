@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Svg, { Circle, Path } from 'react-native-svg';
-import { TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View, Keyboard } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
@@ -69,12 +69,32 @@ function TopicsIcon({ fill }) {
 }
 
 function TabBar({ state, descriptors, navigation }) {
+  const [tabBarHeight, setTabBarHeight] = useState(100);
+
+  useEffect(() => {
+    Keyboard.addListener('keyboardDidShow', keyboardDidShow);
+    Keyboard.addListener('keyboardDidHide', keyboardDidHide);
+
+    return () => {
+      Keyboard.removeListener('keyboardDidShow', keyboardDidShow);
+      Keyboard.removeListener('keyboardDidHide', keyboardDidHide);
+    };
+  }, []);
+
+  const keyboardDidShow = () => {
+    setTabBarHeight(0);
+  };
+
+  const keyboardDidHide = () => {
+    setTabBarHeight(100);
+  };
+
   return (
     <>
       <View
         style={{
           flexDirection: 'row',
-          height: 100,
+          height: tabBarHeight,
           backgroundColor: '#E4E0E0',
         }}
       >
@@ -93,35 +113,42 @@ function TabBar({ state, descriptors, navigation }) {
             });
 
             if (!isFocused && !event.defaultPrevented) {
+              Keyboard.dismiss();
               navigation.navigate(route.name);
             }
           };
 
           return (
-            <TouchableOpacity
-              accessibilityRole="button"
-              accessibilityStates={isFocused ? ['selected'] : []}
-              accessibilityLabel={options.tabBarAccessibilityLabel}
-              testID={options.tabBarTestID}
-              onPress={onPress}
-              style={{
-                flex: 1,
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginBottom: 18,
-              }}
-              key={String(index)}
-            >
-              {!isFocused
-                ? icon
-                : React.cloneElement(icon, { fill: '#FF3358' })}
-            </TouchableOpacity>
+            <>
+              {tabBarHeight > 0 && (
+                <TouchableOpacity
+                  accessibilityRole="button"
+                  accessibilityStates={isFocused ? ['selected'] : []}
+                  accessibilityLabel={options.tabBarAccessibilityLabel}
+                  testID={options.tabBarTestID}
+                  onPress={onPress}
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginBottom: 18,
+                  }}
+                  key={String(index)}
+                >
+                  {!isFocused
+                    ? icon
+                    : React.cloneElement(icon, { fill: '#FF3358' })}
+                </TouchableOpacity>
+              )}
+            </>
           );
         })}
       </View>
-      <View style={{ width: '100%', alignItems: 'center' }}>
-        <BottomDecoration />
-      </View>
+      {tabBarHeight > 0 && (
+        <View style={{ width: '100%', alignItems: 'center' }}>
+          <BottomDecoration />
+        </View>
+      )}
     </>
   );
 }
@@ -131,6 +158,7 @@ function TabRoutes() {
     <Tab.Navigator
       tabBar={(props) => <TabBar {...props} />}
       tabBarPosition="bottom"
+      keyboardDismissMode="auto"
     >
       <Tab.Screen
         options={{ tabBarIcon: <ProfileIcon fill="#C2A4B6" /> }}

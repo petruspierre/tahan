@@ -34,9 +34,14 @@ const Home = () => {
               <Text style={styles.big}>Entrar</Text>
               <Text style={[styles.small, { marginTop: -5 }]}>em uma sala</Text>
             </View>
-            <Text style={[styles.small, { color: '#EAE8E8' }]}>
-              insira o código da sala no espaço abaixo
-            </Text>
+            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+              <Text style={[styles.small, { color: '#EAE8E8' }]}>
+                insira o código
+              </Text>
+              <Text style={[styles.small, { color: '#EAE8E8', marginTop: -5 }]}>
+                no espaço abaixo
+              </Text>
+            </View>
           </View>
           <View style={styles.inputsContainer}>
             <TextInput
