@@ -1,5 +1,7 @@
 import { StyleSheet } from 'react-native';
 
+import { colors } from '../../commonStyles';
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -10,24 +12,13 @@ const styles = StyleSheet.create({
     margin: 16,
     marginBottom: 64,
   },
-  mediumShadow: {
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 5,
-    },
-    shadowOpacity: 0.36,
-    shadowRadius: 6.68,
-
-    elevation: 5,
-  },
   decorationTop1: {
     width: '100%',
     height: 25,
     position: 'absolute',
     top: 0,
     left: 0,
-    backgroundColor: '#FF3358',
+    backgroundColor: colors.primary,
     borderBottomLeftRadius: 8,
     borderBottomRightRadius: 8,
   },
@@ -36,7 +27,7 @@ const styles = StyleSheet.create({
     height: 10,
     position: 'absolute',
     top: 25,
-    backgroundColor: '#FF3358',
+    backgroundColor: colors.primary,
     borderBottomLeftRadius: 8,
     borderBottomRightRadius: 8,
   },
@@ -46,7 +37,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     left: 0,
-    backgroundColor: '#FF3358',
+    backgroundColor: colors.primary,
     borderTopLeftRadius: 8,
     borderTopRightRadius: 8,
   },
@@ -55,9 +46,18 @@ const styles = StyleSheet.create({
     height: 10,
     position: 'absolute',
     bottom: 25,
-    backgroundColor: '#FF3358',
+    backgroundColor: colors.primary,
     borderTopLeftRadius: 8,
     borderTopRightRadius: 8,
+  },
+  googleButton: {
+    width: 280,
+    height: 65,
+    backgroundColor: '#f4f2f2',
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    flexDirection: 'row',
   },
 });
 

@@ -6,6 +6,7 @@ import { useAuth } from '../../contexts/auth';
 
 import { Background } from '../../components';
 
+import { mediumShadow, font, colors } from '../../commonStyles';
 import styles from './styles';
 import logo from '../../assets/logo.png';
 
@@ -22,18 +23,7 @@ const SignIn = () => {
   function GoogleSigninButton() {
     return (
       <TouchableOpacity
-        style={[
-          {
-            width: 280,
-            height: 65,
-            backgroundColor: '#f4f2f2',
-            borderRadius: 16,
-            alignItems: 'center',
-            justifyContent: 'space-evenly',
-            flexDirection: 'row',
-          },
-          styles.mediumShadow,
-        ]}
+        style={[styles.googleButton, mediumShadow]}
         onPress={handleSignIn}
         disabled={isSigninInProgress}
       >
@@ -46,7 +36,7 @@ const SignIn = () => {
         />
         <Text
           style={{
-            fontFamily: 'RobotoSlab_700Bold',
+            fontFamily: font.bold,
             fontSize: 20,
             color: '#B2B2B2',
           }}
@@ -59,7 +49,11 @@ const SignIn = () => {
 
   return (
     <>
-      <StatusBar style="light" backgroundColor="#FF3358" translucent={false} />
+      <StatusBar
+        style="light"
+        backgroundColor={colors.primary}
+        translucent={false}
+      />
       <Background />
       <View style={styles.container}>
         <View style={styles.decorationTop1} />

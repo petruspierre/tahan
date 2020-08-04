@@ -4,6 +4,7 @@ import { RectButton } from 'react-native-gesture-handler';
 
 import { TopDecoration } from '../../components';
 
+import { mediumShadow } from '../../commonStyles';
 import styles from './styles';
 
 const Home = () => {
@@ -21,7 +22,7 @@ const Home = () => {
       <View style={styles.container}>
         <TopDecoration title="JOGAR" />
 
-        <View style={[styles.joinContainer, styles.mediumShadow]}>
+        <View style={[styles.joinContainer, mediumShadow]}>
           <View
             style={{
               flexDirection: 'row',
@@ -102,7 +103,7 @@ const Home = () => {
           </View>
         </View>
 
-        <RectButton style={[styles.createRoomContainer, styles.mediumShadow]}>
+        <RectButton style={[styles.createRoomContainer, mediumShadow]}>
           <Text style={styles.createRoomText}>Criar sala</Text>
         </RectButton>
       </View>

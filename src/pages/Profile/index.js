@@ -7,6 +7,7 @@ import { useAuth } from '../../contexts/auth';
 import { TopDecoration } from '../../components';
 
 import styles from './styles';
+import { colors } from '../../commonStyles';
 
 const Profile = () => {
   const { user, signOut } = useAuth();
@@ -17,7 +18,11 @@ const Profile = () => {
 
   return (
     <>
-      <StatusBar style="light" backgroundColor="#FF3358" translucent={false} />
+      <StatusBar
+        style="light"
+        backgroundColor={colors.primary}
+        translucent={false}
+      />
       <View style={styles.container}>
         <TopDecoration title="PERFIL" />
         <Text>{user?.name}</Text>
