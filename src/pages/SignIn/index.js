@@ -4,7 +4,7 @@ import { View, Image, TouchableOpacity, Text } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useAuth } from '../../contexts/auth';
 
-import { Background } from '../../components';
+import { Background, ErrorModal } from '../../components';
 
 import { mediumShadow, font, colors } from '../../commonStyles';
 import styles from './styles';
@@ -12,11 +12,13 @@ import logo from '../../assets/logo.png';
 
 const SignIn = () => {
   const [isSigninInProgress, setIsSigninInProgress] = useState(false);
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
   const { signIn } = useAuth();
 
   async function handleSignIn() {
     setIsSigninInProgress(true);
-    await signIn();
+    const response = await signIn();
+    if (!response) setErrorModalVisible(true);
     setIsSigninInProgress(false);
   }
 
@@ -55,6 +57,11 @@ const SignIn = () => {
         translucent={false}
       />
       <Background />
+      <ErrorModal
+        visible={errorModalVisible}
+        error="Falha ao tentar fazer o login"
+        dismiss={() => setErrorModalVisible(false)}
+      />
       <View style={styles.container}>
         <View style={styles.decorationTop1} />
         <View style={styles.decorationTop2} />

@@ -32,10 +32,12 @@ export const AuthProvider = ({ children }) => {
         );
         await AsyncStorage.setItem('@Tahan:token', accessToken);
         setUser(response.data.user);
+        return true;
       } catch (err) {
-        console.error(err);
+        return false;
       }
     }
+    return false;
   }
 
   async function signOut() {
