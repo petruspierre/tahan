@@ -26,4 +26,16 @@ const mediumShadow = {
   elevation: 8,
 };
 
-export { metrics, font, colors, mediumShadow };
+const lightShadow = {
+  shadowColor: '#000',
+  shadowOffset: {
+    width: 0,
+    height: 5,
+  },
+  shadowOpacity: 0.36,
+  shadowRadius: 6.68,
+
+  elevation: 5,
+};
+
+export { metrics, font, colors, mediumShadow, lightShadow };
