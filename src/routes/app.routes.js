@@ -134,7 +134,7 @@ function TabBar({ state, descriptors, navigation }) {
                     alignItems: 'center',
                     marginBottom: 18,
                   }}
-                  key={String(index)}
+                  key={String(route.key)}
                 >
                   {!isFocused
                     ? icon
