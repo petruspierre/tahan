@@ -1,15 +1,19 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput } from 'react-native';
 import { AntDesign as Icon, Entypo } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import ModalSelector from 'react-native-modal-selector';
 
+import { lightShadow } from '../../commonStyles';
 import styles from './styles';
 
 const TopicList = () => {
   const navigation = useNavigation();
   const [category, setCategory] = useState('Matemática');
+  const [order, setOrder] = useState('Avaliação');
+  const [search, setSearch] = useState('');
   const categorySelector = useRef(null);
+  const orderSelector = useRef(null);
 
   const categories = [
     { key: 'MAT', label: 'Matemática' },
@@ -21,6 +25,11 @@ const TopicList = () => {
     { key: 'QUI', label: 'Química' },
     { key: 'SOC', label: 'Sociologia' },
     { key: 'FIL', label: 'Filosofia' },
+  ];
+
+  const orderOptions = [
+    { key: 'RAT', label: 'Avaliação' },
+    { key: 'REC', label: 'Recentes' },
   ];
 
   function handleNavigateBack() {
@@ -78,7 +87,53 @@ const TopicList = () => {
               >
                 <Text style={styles.categoryInitValue}>{category}</Text>
                 <View style={styles.arrowDownContainer}>
-                  <Icon name="down" size={16} color="white" />
+                  <Entypo name="chevron-down" size={24} color="white" />
+                </View>
+              </TouchableOpacity>
+            }
+          />
+        </View>
+
+        <View style={[styles.searchInputContainer, lightShadow]}>
+          <TextInput
+            style={styles.searchInput}
+            value={search}
+            onChangeText={(text) => setSearch(text)}
+            placeholder="Pesquise aqui!"
+            placeholderTextColor="#C5BCBC"
+          />
+        </View>
+
+        <View style={styles.orderContainer}>
+          <View style={styles.orderTextContainer}>
+            <Text style={styles.orderText}>Ordenar por:</Text>
+          </View>
+          <ModalSelector
+            data={orderOptions}
+            initValue={order}
+            onChange={(option) => setOrder(option.label)}
+            cancelText="CANCELAR"
+            supportedOrientations={['portrait']}
+            animationType="fade"
+            backdropPressToClose
+            //
+            style={styles.categoryPickerContainerStyle}
+            touchableStyle={styles.categoryTouchable}
+            optionContainerStyle={styles.optionContainerStyle}
+            selectTextStyle={styles.categoryTextStyle}
+            optionTextStyle={styles.categoryOptionText}
+            cancelStyle={styles.cancelContainerStyle}
+            cancelTextStyle={styles.cancelTextStyle}
+            //
+            ref={orderSelector}
+            customSelector={
+              <TouchableOpacity
+                style={styles.selectStyle}
+                onPress={() => orderSelector.current.open()}
+              >
+                <Text style={styles.orderInitValue}>{order}</Text>
+                <View style={styles.orderArrowDownContainer}>
+                  <Entypo name="chevron-down" size={24} color="#FF3358" />
                 </View>
               </TouchableOpacity>
             }

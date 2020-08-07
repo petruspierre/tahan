@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
   topContainer: {
     marginTop: 16,
   },
+
   categoryContainer: {
     flexDirection: 'row',
     backgroundColor: colors.primary,
@@ -44,12 +45,12 @@ const styles = StyleSheet.create({
     width: '45%',
     justifyContent: 'center',
     alignItems: 'center',
-    elevation: 11,
+    elevation: 5,
   },
   categoryText: {
     color: 'white',
     fontFamily: font.bold,
-    fontSize: 20,
+    fontSize: 18,
   },
   categoryPickerContainerStyle: {
     width: '55%',
@@ -75,7 +76,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: colors.primary,
-    elevation: 11,
+    elevation: 5,
     height: '100%',
     paddingHorizontal: 8,
     borderBottomRightRadius: 8,
@@ -86,12 +87,12 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   categoryOptionText: {
-    fontSize: 20,
+    fontSize: 18,
     fontFamily: font.bold,
     color: colors.primary,
   },
   categoryInitValue: {
-    fontSize: 20,
+    fontSize: 18,
     fontFamily: font.bold,
     color: 'white',
     textAlign: 'left',
@@ -107,6 +108,67 @@ const styles = StyleSheet.create({
   cancelTextStyle: {
     fontFamily: font.bold,
     color: 'white',
+  },
+
+  searchInputContainer: {
+    height: 45,
+    width: '100%',
+    borderWidth: 3,
+    borderColor: colors.primary,
+    backgroundColor: 'white',
+    padding: 3,
+    borderRadius: 10,
+    marginTop: 16,
+  },
+  searchInput: {
+    backgroundColor: '#EAE8E8',
+    borderRadius: 7,
+    textAlign: 'left',
+    fontSize: 18,
+    padding: 0,
+    paddingLeft: 16,
+    height: '100%',
+    fontFamily: font.bold,
+  },
+
+  orderContainer: {
+    marginTop: 16,
+    flexDirection: 'row',
+    backgroundColor: colors.black,
+    borderRadius: 8,
+    width: '100%',
+    height: 36,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  orderTextContainer: {
+    backgroundColor: '#DCDADA',
+    borderRadius: 8,
+    height: 36,
+    padding: 8,
+    width: '45%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  orderText: {
+    color: colors.primary,
+    fontFamily: font.bold,
+    fontSize: 18,
+  },
+  orderInitValue: {
+    fontSize: 18,
+    fontFamily: font.bold,
+    color: colors.primary,
+    textAlign: 'left',
+  },
+  orderArrowDownContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#DCDADA',
+    height: '100%',
+    paddingHorizontal: 8,
+    borderBottomRightRadius: 8,
+    borderTopRightRadius: 8,
   },
 });
 
