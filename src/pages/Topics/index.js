@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import { Entypo as Icon } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 import { TopDecoration } from '../../components';
 
@@ -9,11 +10,20 @@ import { mediumShadow } from '../../commonStyles';
 import styles from './styles';
 
 const Topics = () => {
+  const navigation = useNavigation();
+
+  function handleNavigateSearchTopics() {
+    navigation.navigate('TopicList');
+  }
+
   return (
     <View style={styles.container}>
       <TopDecoration title="TÓPICOS" />
 
-      <RectButton style={[styles.searchContainer, mediumShadow]}>
+      <RectButton
+        style={[styles.searchContainer, mediumShadow]}
+        onPress={handleNavigateSearchTopics}
+      >
         <View style={{ alignItems: 'center' }}>
           <Text style={styles.big}>Pesquisar</Text>
           <Text style={styles.small}>por tópicos</Text>
