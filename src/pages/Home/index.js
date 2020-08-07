@@ -1,8 +1,11 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, TextInput } from 'react-native';
+import { View, Text, TextInput, Image } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { TopDecoration } from '../../components';
+
+import confusedIcon from '../../assets/icons/confused.png';
 
 import { mediumShadow } from '../../commonStyles';
 import styles from './styles';
@@ -19,7 +22,11 @@ const Home = () => {
 
   return (
     <>
-      <View style={styles.container}>
+      <KeyboardAwareScrollView
+        style={styles.container}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ alignItems: 'center', padding: 32 }}
+      >
         <TopDecoration title="JOGAR" />
 
         <View style={[styles.joinContainer, mediumShadow]}>
@@ -111,7 +118,17 @@ const Home = () => {
         <RectButton style={[styles.createRoomContainer, mediumShadow]}>
           <Text style={styles.createRoomText}>Criar sala</Text>
         </RectButton>
-      </View>
+
+        <View style={styles.invitesContainer}>
+          <Text style={styles.invitesTitle}>Convites:</Text>
+          <View style={styles.noInvites}>
+            <Text style={styles.noInvitesText}>
+              Parece que não há nenhum convite por aqui...
+            </Text>
+            <Image source={confusedIcon} style={styles.confusedIcon} />
+          </View>
+        </View>
+      </KeyboardAwareScrollView>
     </>
   );
 };
