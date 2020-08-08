@@ -22,6 +22,7 @@ const TopicList = () => {
   const navigation = useNavigation();
 
   const [posts, setPosts] = useState([]);
+  const [refresh, setRefresh] = useState(false);
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState('Matemática');
   const [order, setOrder] = useState('Avaliação');
@@ -48,13 +49,21 @@ const TopicList = () => {
     { key: 'REC', label: 'Recentes' },
   ];
 
+  function handleNavigateToTopic(id) {
+    navigation.navigate('TopicInfo', { id });
+  }
+
   function handleNavigateBack() {
     navigation.goBack();
   }
 
-  function Topic({ title, onPress }) {
+  function Topic({ title, onPress, index }) {
+    const style = { marginLeft: 0 };
+    if (index % 2 !== 0) {
+      style.marginLeft = '4%';
+    }
     return (
-      <RectButton style={styles.topicContainer} onPress={onPress}>
+      <RectButton style={[styles.topicContainer, style]} onPress={onPress}>
         <View style={styles.topicImage}>
           {/* Substituir essa View por uma Image */}
           <Entypo name="image" color="white" size={56} />
@@ -69,20 +78,13 @@ const TopicList = () => {
   }
 
   function renderPost(post, index) {
-    const next = posts[index + 1];
-    if (next) {
-      index += 1;
-      return (
-        <View style={styles.topicRow}>
-          <Topic title={post.title} id={post.id} />
-          <Topic title={next.title} id={next.id} />
-        </View>
-      );
-    }
     return (
-      <View style={styles.topicRow}>
-        <Topic title={post.title} id={post.id} />
-      </View>
+      <Topic
+        title={post.title}
+        index={index}
+        id={post.id}
+        onPress={() => handleNavigateToTopic(post.id)}
+      />
     );
   }
 
@@ -110,7 +112,8 @@ const TopicList = () => {
     <View style={styles.container}>
       <ErrorModal
         visible={isErrorModalVisible}
-        onPress={() => isErrorModalVisible(false)}
+        error="Não foi possível carregar os posts! Tente novamente."
+        dismiss={() => setIsErrorModalVisible(false)}
       />
       <View style={styles.header}>
         <RectButton style={styles.backButton} onPress={handleNavigateBack}>
@@ -218,6 +221,13 @@ const TopicList = () => {
         </View>
       ) : (
         <FlatList
+          numColumns={2}
+          onRefresh={() => {
+            setRefresh(true);
+            getPosts();
+            setRefresh(false);
+          }}
+          refreshing={refresh}
           style={styles.mainContent}
           data={posts}
           keyExtractor={(post) => String(post.id)}

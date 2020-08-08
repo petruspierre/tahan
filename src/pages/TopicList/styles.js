@@ -1,12 +1,13 @@
 import { StyleSheet } from 'react-native';
 
-import { colors, font, metrics } from '../../commonStyles';
+import { colors, font } from '../../commonStyles';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
     padding: 32,
+    paddingBottom: 0,
   },
   header: {
     flexDirection: 'row',
@@ -176,17 +177,13 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
 
-  topicRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
-  },
-
   topicContainer: {
+    justifyContent: 'space-between',
     width: '48%',
     backgroundColor: '#393737',
     borderRadius: 10,
     height: 140,
+    marginBottom: 8,
   },
   topicImage: {
     height: '65%',

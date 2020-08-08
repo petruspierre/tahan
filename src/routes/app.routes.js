@@ -10,6 +10,7 @@ import Quizzes from '../pages/Quizzes';
 import Profile from '../pages/Profile';
 import Topics from '../pages/Topics';
 import TopicList from '../pages/TopicList';
+import TopicInfo from '../pages/TopicInfo';
 
 import { BottomDecoration } from '../components';
 
@@ -188,7 +189,8 @@ function TabRoutes() {
 const AppRoutes = () => (
   <AppStack.Navigator headerMode="none">
     <AppStack.Screen name="Home" component={TabRoutes} />
-    <Tab.Screen name="TopicList" component={TopicList} />
+    <AppStack.Screen name="TopicList" component={TopicList} />
+    <AppStack.Screen name="TopicInfo" component={TopicInfo} />
   </AppStack.Navigator>
 );
 
