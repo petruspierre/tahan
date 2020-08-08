@@ -1,17 +1,33 @@
-import React, { useState, useRef } from 'react';
-import { View, Text, TouchableOpacity, TextInput } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  FlatList,
+  ActivityIndicator,
+} from 'react-native';
 import { AntDesign as Icon, Entypo } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import ModalSelector from 'react-native-modal-selector';
+import { RectButton } from 'react-native-gesture-handler';
+
+import { ErrorModal } from '../../components';
+
+import api from '../../services/api';
 
 import { lightShadow } from '../../commonStyles';
 import styles from './styles';
 
 const TopicList = () => {
   const navigation = useNavigation();
+
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState('Matemática');
   const [order, setOrder] = useState('Avaliação');
   const [search, setSearch] = useState('');
+  const [isErrorModalVisible, setIsErrorModalVisible] = useState(false);
+
   const categorySelector = useRef(null);
   const orderSelector = useRef(null);
 
@@ -36,15 +52,70 @@ const TopicList = () => {
     navigation.goBack();
   }
 
+  function Topic({ title, onPress }) {
+    return (
+      <RectButton style={styles.topicContainer} onPress={onPress}>
+        <View style={styles.topicImage}>
+          {/* Substituir essa View por uma Image */}
+          <Entypo name="image" color="white" size={56} />
+        </View>
+        <View style={styles.topicTitleContainer}>
+          <Text numberOfLines={2} style={styles.topicTitle}>
+            {title}
+          </Text>
+        </View>
+      </RectButton>
+    );
+  }
+
+  function renderPost(post, index) {
+    const next = posts[index + 1];
+    if (next) {
+      index += 1;
+      return (
+        <View style={styles.topicRow}>
+          <Topic title={post.title} id={post.id} />
+          <Topic title={next.title} id={next.id} />
+        </View>
+      );
+    }
+    return (
+      <View style={styles.topicRow}>
+        <Topic title={post.title} id={post.id} />
+      </View>
+    );
+  }
+
+  async function getPosts() {
+    try {
+      setLoading(true);
+      const response = await api.get('/posts');
+
+      const postsData = response.data.data.map((post) => ({
+        id: post.id,
+        title: post.title,
+      }));
+      setPosts(postsData);
+    } catch (err) {
+      setIsErrorModalVisible(true);
+    }
+    setLoading(false);
+  }
+
+  useEffect(() => {
+    getPosts();
+  }, []);
+
   return (
     <View style={styles.container}>
+      <ErrorModal
+        visible={isErrorModalVisible}
+        onPress={() => isErrorModalVisible(false)}
+      />
       <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={handleNavigateBack}
-        >
+        <RectButton style={styles.backButton} onPress={handleNavigateBack}>
           <Icon name="arrowleft" size={32} color="white" />
-        </TouchableOpacity>
+        </RectButton>
         <View
           style={{
             flexDirection: 'row',
@@ -81,7 +152,7 @@ const TopicList = () => {
             //
             ref={categorySelector}
             customSelector={
-              <TouchableOpacity
+              <RectButton
                 style={styles.selectStyle}
                 onPress={() => categorySelector.current.open()}
               >
@@ -89,7 +160,7 @@ const TopicList = () => {
                 <View style={styles.arrowDownContainer}>
                   <Entypo name="chevron-down" size={24} color="white" />
                 </View>
-              </TouchableOpacity>
+              </RectButton>
             }
           />
         </View>
@@ -127,7 +198,7 @@ const TopicList = () => {
             //
             ref={orderSelector}
             customSelector={
-              <TouchableOpacity
+              <RectButton
                 style={styles.selectStyle}
                 onPress={() => orderSelector.current.open()}
               >
@@ -135,11 +206,25 @@ const TopicList = () => {
                 <View style={styles.orderArrowDownContainer}>
                   <Entypo name="chevron-down" size={24} color="#FF3358" />
                 </View>
-              </TouchableOpacity>
+              </RectButton>
             }
           />
         </View>
       </View>
+
+      {loading ? (
+        <View style={{ flex: 1, justifyContent: 'center' }}>
+          <ActivityIndicator size="large" color="#FF3358" />
+        </View>
+      ) : (
+        <FlatList
+          style={styles.mainContent}
+          data={posts}
+          keyExtractor={(post) => String(post.id)}
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item, index }) => renderPost(item, index)}
+        />
+      )}
     </View>
   );
 };

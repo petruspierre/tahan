@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-import { colors, font } from '../../commonStyles';
+import { colors, font, metrics } from '../../commonStyles';
 
 const styles = StyleSheet.create({
   container: {
@@ -169,6 +169,43 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     borderBottomRightRadius: 8,
     borderTopRightRadius: 8,
+  },
+
+  mainContent: {
+    width: '100%',
+    marginTop: 16,
+  },
+
+  topicRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+
+  topicContainer: {
+    width: '48%',
+    backgroundColor: '#393737',
+    borderRadius: 10,
+    height: 140,
+  },
+  topicImage: {
+    height: '65%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  topicTitleContainer: {
+    height: '35%',
+    width: '100%',
+    padding: 5,
+    backgroundColor: colors.black,
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+  },
+  topicTitle: {
+    fontSize: 14,
+    color: 'white',
+    fontFamily: font.bold,
+    textAlign: 'center',
   },
 });
 
