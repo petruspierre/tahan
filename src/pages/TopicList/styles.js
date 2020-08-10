@@ -1,12 +1,12 @@
 import { StyleSheet } from 'react-native';
 
-import { colors, font } from '../../commonStyles';
+import { colors, font, metrics } from '../../commonStyles';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    padding: 32,
+    padding: metrics.pagePadding,
     paddingBottom: 0,
   },
   header: {
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
     width: '48%',
     backgroundColor: '#393737',
     borderRadius: 10,
-    height: 140,
+    height: 160,
     marginBottom: 8,
   },
   topicImage: {
@@ -197,6 +197,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.black,
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
+    justifyContent: 'center',
   },
   topicTitle: {
     fontSize: 14,

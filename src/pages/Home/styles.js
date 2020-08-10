@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
   },
   joinContainer: {
     width: '100%',
-    padding: 16,
+    padding: 20,
     backgroundColor: colors.black,
     borderRadius: 10,
     justifyContent: 'center',
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     width: metrics.width * 0.6 - 32,
     resizeMode: 'contain',
     marginTop: -64,
-    marginLeft: -24,
+    marginLeft: -16,
   },
 });
 

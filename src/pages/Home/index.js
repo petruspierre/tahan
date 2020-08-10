@@ -42,10 +42,10 @@ const Home = () => {
               <Text style={[styles.small, { marginTop: -5 }]}>em uma sala</Text>
             </View>
             <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-              <Text style={[styles.small, { color: '#EAE8E8' }]}>
-                insira o código
+              <Text style={[styles.small, { color: '#EAE8E8', marginTop: 8 }]}>
+                insira o código da sala
               </Text>
-              <Text style={[styles.small, { color: '#EAE8E8', marginTop: -5 }]}>
+              <Text style={[styles.small, { color: '#EAE8E8' }]}>
                 no espaço abaixo
               </Text>
             </View>

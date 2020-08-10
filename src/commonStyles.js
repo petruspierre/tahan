@@ -5,6 +5,8 @@ const { width, height } = Dimensions.get('window');
 const metrics = {
   width,
   height,
+  pagePadding: 20,
+  tabPadding: 32,
 };
 const font = {
   regular: 'RobotoSlab_400Regular',
