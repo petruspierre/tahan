@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { GoogleSignin } from '@react-native-community/google-signin';
 import AsyncStorage from '@react-native-community/async-storage';
+import NetInfo from '@react-native-community/netinfo';
 
 import * as auth from '../services/auth';
 import api from '../services/api';
@@ -12,9 +13,9 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   async function signIn() {
-    const googleResponse = await auth.signIn();
-    if (googleResponse) {
-      try {
+    try {
+      const googleResponse = await auth.signIn();
+      if (googleResponse) {
         const { accessToken } = await GoogleSignin.getTokens();
 
         const data = {
@@ -33,9 +34,9 @@ export const AuthProvider = ({ children }) => {
         await AsyncStorage.setItem('@Tahan:token', accessToken);
         setUser(response.data.user);
         return true;
-      } catch (err) {
-        return false;
       }
+    } catch {
+      return false;
     }
     return false;
   }
@@ -48,6 +49,22 @@ export const AuthProvider = ({ children }) => {
   }
 
   useEffect(() => {
+    async function checkInternetConnection() {
+      const state = await NetInfo.fetch();
+
+      if (state.isConnected === false) {
+        signOut();
+      }
+    }
+
+    async function checkAPIConnection() {
+      try {
+        await api.get('topics');
+      } catch {
+        signOut();
+      }
+    }
+
     async function loadStorageData() {
       const storagedUser = await AsyncStorage.getItem('@Tahan:user');
       const storagedToken = await AsyncStorage.getItem('@Tahan:token');
@@ -56,10 +73,16 @@ export const AuthProvider = ({ children }) => {
         setUser(JSON.parse(storagedUser));
         api.defaults.headers.Authorization = `Bearer ${storagedToken}`;
       }
+    }
+
+    async function loadApp() {
+      await checkAPIConnection();
+      await checkInternetConnection();
+      await loadStorageData();
       setLoading(false);
     }
-    loadStorageData();
-  });
+    loadApp();
+  }, []);
 
   return (
     <AuthContext.Provider

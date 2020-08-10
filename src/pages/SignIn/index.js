@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import { View, Image, TouchableOpacity, Text } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import NetInfo from '@react-native-community/netinfo';
 import { useAuth } from '../../contexts/auth';
 
 import { Background, ErrorModal } from '../../components';
@@ -17,8 +18,12 @@ const SignIn = () => {
 
   async function handleSignIn() {
     setIsSigninInProgress(true);
-    const response = await signIn();
-    if (!response) setErrorModalVisible(true);
+    try {
+      await NetInfo.fetch();
+      await signIn();
+    } catch {
+      setErrorModalVisible(true);
+    }
     setIsSigninInProgress(false);
   }
 
