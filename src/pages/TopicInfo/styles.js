@@ -36,12 +36,14 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 40,
+    lineHeight: 40,
     fontFamily: font.bold,
     color: colors.black,
     textAlign: 'center',
+    marginTop: 16,
   },
-  subtitle: {
-    fontSize: 20,
+  description: {
+    fontSize: 15,
     fontFamily: font.bold,
     color: colors.black,
     textAlign: 'center',
@@ -49,18 +51,6 @@ const styles = StyleSheet.create({
   postContentContainer: {
     width: '100%',
     marginTop: 16,
-  },
-  postContent: {
-    backgroundColor: '#ECECEC',
-    borderRadius: 5,
-    padding: 8,
-    marginBottom: 16,
-  },
-  postText: {
-    fontSize: 15,
-    fontFamily: font.bold,
-    color: colors.black,
-    textAlign: 'justify',
   },
 
   contentFooterContainer: {
