@@ -8,6 +8,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import Home from '../pages/Home';
 import Quizzes from '../pages/Quizzes';
 import Profile from '../pages/Profile';
+import Friends from '../pages/Friends';
 import Topics from '../pages/Topics';
 import TopicList from '../pages/TopicList';
 import TopicInfo from '../pages/TopicInfo';
@@ -42,7 +43,7 @@ function QuizIcon({ fill }) {
   );
 }
 
-function ProfileIcon({ fill }) {
+function FriendsIcon({ fill }) {
   return (
     <Svg width={53} height={37} viewBox="0 0 53 37" fill="none">
       <Path
@@ -55,6 +56,19 @@ function ProfileIcon({ fill }) {
       />
       <Circle cx={32.535} cy={9.569} r={9.569} fill={fill} />
       <Circle cx={14.672} cy={17.224} r={7.017} fill={fill} />
+    </Svg>
+  );
+}
+
+function ProfileIcon({ fill }) {
+  return (
+    <Svg width={44} height={45} viewBox="0 0 44 45" fill="none">
+      <Path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M4 3h36a1 1 0 011 1v34.98c-1.111-4.847-9.19-8.605-19-8.605S4.111 34.133 3 38.98V4a1 1 0 011-1zM0 4a4 4 0 014-4h36a4 4 0 014 4v37a4 4 0 01-4 4H4a4 4 0 01-4-4V4zm28.764 4.856A9.474 9.474 0 0022 6a9.474 9.474 0 00-6.764 2.856 9.846 9.846 0 00-2.801 6.894 9.846 9.846 0 002.801 6.894A9.474 9.474 0 0022 25.5a9.474 9.474 0 006.764-2.856 9.846 9.846 0 002.801-6.894 9.846 9.846 0 00-2.801-6.894z"
+        fill={fill}
+      />
     </Svg>
   );
 }
@@ -120,30 +134,29 @@ function TabBar({ state, descriptors, navigation }) {
             }
           };
 
-          return (
-            <>
-              {tabBarHeight > 0 && (
-                <TouchableOpacity
-                  accessibilityRole="button"
-                  accessibilityStates={isFocused ? ['selected'] : []}
-                  accessibilityLabel={options.tabBarAccessibilityLabel}
-                  testID={options.tabBarTestID}
-                  onPress={onPress}
-                  style={{
-                    flex: 1,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginBottom: 18,
-                  }}
-                  key={String(route.key)}
-                >
-                  {!isFocused
-                    ? icon
-                    : React.cloneElement(icon, { fill: '#FF3358' })}
-                </TouchableOpacity>
-              )}
-            </>
-          );
+          if (tabBarHeight > 0) {
+            return (
+              <TouchableOpacity
+                accessibilityRole="button"
+                accessibilityStates={isFocused ? ['selected'] : []}
+                accessibilityLabel={options.tabBarAccessibilityLabel}
+                testID={options.tabBarTestID}
+                onPress={onPress}
+                key={String(route.key)}
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginBottom: 18,
+                }}
+              >
+                {!isFocused
+                  ? icon
+                  : React.cloneElement(icon, { fill: '#FF3358' })}
+              </TouchableOpacity>
+            );
+          }
+          return null;
         })}
       </View>
       {tabBarHeight > 0 && (
@@ -161,11 +174,18 @@ function TabRoutes() {
       tabBar={(props) => <TabBar {...props} />}
       tabBarPosition="bottom"
       keyboardDismissMode="auto"
+      initialRouteName="Jogar"
+      backBehavior="initialRoute"
     >
       <Tab.Screen
         options={{ tabBarIcon: <ProfileIcon fill="#C2A4B6" /> }}
         name="Perfil"
         component={Profile}
+      />
+      <Tab.Screen
+        options={{ tabBarIcon: <FriendsIcon fill="#C2A4B6" /> }}
+        name="Amigos"
+        component={Friends}
       />
       <Tab.Screen
         options={{ tabBarIcon: <PlayIcon fill="#C2A4B6" /> }}
