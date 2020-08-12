@@ -25,6 +25,7 @@ export const AuthProvider = ({ children }) => {
 
         const response = await api.post('users/sign-in', data);
 
+        console.log(response.data.login_token);
         api.defaults.headers.Authorization = `Bearer ${response.data.login_token}`;
 
         await AsyncStorage.setItem(

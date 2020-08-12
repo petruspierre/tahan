@@ -15,9 +15,18 @@ import styles from './styles';
 
 const TopicInfo = () => {
   const [isErrorModalVisible, setIsErrorModalVisible] = useState(false);
-  const [postData, setPostData] = useState({});
+  const [errorMessage, setErrorMessage] = useState(
+    'Falha ao recuperar os dados desse post'
+  );
+
   const [loading, setLoading] = useState(true);
-  const commentsContainer = useRef(null);
+  const [postData, setPostData] = useState({});
+
+  const [liked, setLiked] = useState(false);
+  const [likes, setLikes] = useState(0);
+
+  const [comments, setComments] = useState([]);
+
   const scroll = useRef(null);
 
   const navigation = useNavigation();
@@ -32,6 +41,10 @@ const TopicInfo = () => {
       const { id } = route.params;
       const response = await api.get(`/posts/${id}`);
       setPostData(response.data);
+      setLiked(response.data.likes.user_liked);
+      setLikes(response.data.likes.count);
+      setComments(response.data.comments.data);
+
       setLoading(false);
     } catch {
       setIsErrorModalVisible(true);
@@ -41,6 +54,23 @@ const TopicInfo = () => {
   function handleGetError() {
     setIsErrorModalVisible(false);
     navigation.goBack();
+  }
+
+  async function handleLike() {
+    try {
+      await api.post(`posts/${postData.id}/like`);
+      if (liked) {
+        setLiked(false);
+        setLikes(likes - 1);
+      } else {
+        setLiked(true);
+        setLikes(likes + 1);
+      }
+    } catch (err) {
+      console.error(err);
+      setErrorMessage('Falha ao dar like. Favor tentar novamente');
+      setIsErrorModalVisible(true);
+    }
   }
 
   useEffect(() => {
@@ -66,7 +96,7 @@ const TopicInfo = () => {
       >
         <ErrorModal
           visible={isErrorModalVisible}
-          error="Falha ao recuperar os dados desse post"
+          error={errorMessage}
           dismiss={handleGetError}
         />
         <View style={styles.header}>
@@ -99,9 +129,17 @@ const TopicInfo = () => {
           </View>
         </View>
         <View style={styles.contentFooterContainer}>
-          <TouchableOpacity activeOpacity={0.7} style={styles.likes}>
-            <Icon name="heart" size={40} color="#B2B2B2" />
-            <Text style={styles.likesText}>{postData.likes.count}</Text>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            style={styles.likes}
+            onPress={handleLike}
+          >
+            {liked ? (
+              <Icon name="heart" size={40} color="#FF3358" />
+            ) : (
+              <Icon name="heart" size={40} color="#B2B2B2" />
+            )}
+            <Text style={styles.likesText}>{likes}</Text>
           </TouchableOpacity>
           <View style={styles.author}>
             <Text style={styles.mediumText}>Por:</Text>
@@ -119,19 +157,23 @@ const TopicInfo = () => {
             </TouchableOpacity>
           </View>
         </View>
-        <View style={styles.commentsContainer} ref={commentsContainer}>
+        <View style={styles.commentsContainer}>
           <Text style={styles.mediumText}>Comentários</Text>
           <View style={styles.commentsDivider} />
-
           <View style={styles.commentList}>
-            {postData.comments.data.map((comment) => (
+            {comments.map((comment) => (
               <View
                 key={String(comment.id)}
                 style={[styles.comment, lightShadow]}
               >
                 <View style={styles.commentAuthorInfo}>
-                  <View style={styles.commentAuthorImage} />
-                  <Text style={styles.commentAuthorName}>username</Text>
+                  <Image
+                    style={styles.commentAuthorImage}
+                    source={{ uri: comment.author.image_url }}
+                  />
+                  <Text numberOfLines={1} style={styles.commentAuthorName}>
+                    {comment.author.username}
+                  </Text>
                 </View>
                 <Text style={styles.commentText}>{comment.text}</Text>
               </View>
