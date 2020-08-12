@@ -25,14 +25,13 @@ export const AuthProvider = ({ children }) => {
 
         const response = await api.post('users/sign-in', data);
 
-        console.log(response.data.login_token);
         api.defaults.headers.Authorization = `Bearer ${response.data.login_token}`;
 
         await AsyncStorage.setItem(
           '@Tahan:user',
           JSON.stringify(response.data.user)
         );
-        await AsyncStorage.setItem('@Tahan:token', accessToken);
+        await AsyncStorage.setItem('@Tahan:token', response.data.login_token);
         setUser(response.data.user);
         return true;
       }
