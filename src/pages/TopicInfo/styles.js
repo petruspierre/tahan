@@ -121,7 +121,11 @@ const styles = StyleSheet.create({
   commentAuthorInfo: {
     flexDirection: 'row',
     alignItems: 'center',
+    width: '100%',
     marginBottom: 8,
+  },
+  trashIcon: {
+    marginLeft: 8,
   },
   commentAuthorImage: {
     height: 30,

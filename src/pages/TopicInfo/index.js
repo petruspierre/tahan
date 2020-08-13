@@ -1,5 +1,12 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, ScrollView, ActivityIndicator, Image } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {
+  View,
+  Text,
+  ScrollView,
+  ActivityIndicator,
+  Image,
+  Alert,
+} from 'react-native';
 import { AntDesign as Icon, Entypo } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { RectButton, TouchableOpacity } from 'react-native-gesture-handler';
@@ -7,6 +14,8 @@ import { format, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
 import { ErrorModal, PostContent } from '../../components';
+
+import { useAuth } from '../../contexts/auth';
 
 import api from '../../services/api';
 
@@ -20,6 +29,7 @@ const TopicInfo = () => {
   );
 
   const [loading, setLoading] = useState(true);
+  const [loadingComments, setLoadingComments] = useState(true);
   const [postData, setPostData] = useState({});
 
   const [liked, setLiked] = useState(false);
@@ -27,7 +37,7 @@ const TopicInfo = () => {
 
   const [comments, setComments] = useState([]);
 
-  const scroll = useRef(null);
+  const { user } = useAuth();
 
   const navigation = useNavigation();
   const route = useRoute();
@@ -43,12 +53,26 @@ const TopicInfo = () => {
       setPostData(response.data);
       setLiked(response.data.likes.user_liked);
       setLikes(response.data.likes.count);
-      setComments(response.data.comments.data);
 
       setLoading(false);
     } catch {
       setIsErrorModalVisible(true);
     }
+  }
+
+  async function getComments() {
+    try {
+      setLoadingComments(true);
+      const { id } = route.params;
+      const response = await api.get(`/posts/${id}/comments`);
+      setComments(response.data);
+    } catch {
+      setErrorMessage(
+        'Não foi possível carregar os comentários desse tópico. Tente novamente'
+      );
+      setIsErrorModalVisible(true);
+    }
+    setLoadingComments(false);
   }
 
   function handleGetError() {
@@ -73,14 +97,40 @@ const TopicInfo = () => {
     }
   }
 
+  async function handleDeleteComment(id) {
+    try {
+      await api.delete(`/posts/comments/${id}`);
+      getComments();
+    } catch {
+      setErrorMessage('Não foi possível deletar esse comentário.');
+      setIsErrorModalVisible(true);
+    }
+  }
+
+  function handleTrashClick(id) {
+    Alert.alert(
+      'Deletar comentário',
+      'Tem certeza que você quer deletar esse comentário?',
+      [
+        {
+          text: 'NÃO',
+          style: 'cancel',
+        },
+        { text: 'SIM', onPress: () => handleDeleteComment(id) },
+      ],
+      { cancelable: false }
+    );
+  }
+
   useEffect(() => {
     getTopicInfo();
+    getComments();
   }, []);
 
   if (loading) {
     return (
-      <View style={styles.container}>
-        <ActivityIndicator size="large" />
+      <View style={{ flex: 1, justifyContent: 'center' }}>
+        <ActivityIndicator size="large" color="#FF3358" />
       </View>
     );
   }
@@ -88,7 +138,6 @@ const TopicInfo = () => {
   return (
     <>
       <ScrollView
-        ref={scroll}
         style={styles.container}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="always"
@@ -160,25 +209,36 @@ const TopicInfo = () => {
         <View style={styles.commentsContainer}>
           <Text style={styles.mediumText}>Comentários</Text>
           <View style={styles.commentsDivider} />
-          <View style={styles.commentList}>
-            {comments.map((comment) => (
-              <View
-                key={String(comment.id)}
-                style={[styles.comment, lightShadow]}
-              >
-                <View style={styles.commentAuthorInfo}>
-                  <Image
-                    style={styles.commentAuthorImage}
-                    source={{ uri: comment.author.image_url }}
-                  />
-                  <Text numberOfLines={1} style={styles.commentAuthorName}>
-                    {comment.author.username}
-                  </Text>
+
+          {!loadingComments && (
+            <View style={styles.commentList}>
+              {comments.map((comment) => (
+                <View
+                  key={String(comment.id)}
+                  style={[styles.comment, lightShadow]}
+                >
+                  <View style={styles.commentAuthorInfo}>
+                    <Image
+                      style={styles.commentAuthorImage}
+                      source={{ uri: comment.author.image_url }}
+                    />
+                    <Text numberOfLines={1} style={styles.commentAuthorName}>
+                      {comment.author.username}
+                    </Text>
+                    {user.id === comment.author.id && (
+                      <TouchableOpacity
+                        style={styles.trashIcon}
+                        onPress={() => handleTrashClick(comment.id)}
+                      >
+                        <Icon name="delete" size={16} color="#FF3358" />
+                      </TouchableOpacity>
+                    )}
+                  </View>
+                  <Text style={styles.commentText}>{comment.text}</Text>
                 </View>
-                <Text style={styles.commentText}>{comment.text}</Text>
-              </View>
-            ))}
-          </View>
+              ))}
+            </View>
+          )}
 
           <RectButton style={styles.commentButton}>
             <Text style={styles.buttonText}>Comentar</Text>
