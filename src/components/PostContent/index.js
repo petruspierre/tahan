@@ -15,12 +15,13 @@ const PostContent = ({ type, text }) => {
     aditionalStyle.alignSelf = 'center';
   } else if (type === 'paragraph') {
     aditionalStyle.textAlign = 'justify';
+    text = `   ${text}`;
   } else if (type === 'topic') {
     text = `• ${text}`;
   }
 
   return (
-    <View style={[styles.postContent, lightShadow, aditionalStyle]}>
+    <View style={[styles.postContent, aditionalStyle, lightShadow]}>
       <Text style={[styles.postText, aditionalStyle]}>{text}</Text>
     </View>
   );
