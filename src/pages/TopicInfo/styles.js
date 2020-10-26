@@ -161,6 +161,37 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 
+  creatingButtons: {
+    justifyContent: 'space-evenly',
+    width: '25%',
+  },
+  createCommentText: {
+    width: '100%',
+    fontSize: 15,
+    fontFamily: font.bold,
+    color: colors.black,
+    textAlign: 'justify',
+    lineHeight: 15,
+  },
+  creatingButton: {
+    width: '100%',
+    padding: 8,
+    backgroundColor: '#FF3358',
+    borderRadius: 5,
+  },
+  creatingButtonText: {
+    color: 'white',
+    fontFamily: font.bold,
+  },
+  createComment: {
+    width: '90%',
+    flexDirection: 'row',
+    backgroundColor: '#DCDADA',
+    padding: 9,
+    borderRadius: 10,
+    marginTop: 16,
+  },
+
   actionButton: {
     backgroundColor: colors.primary,
     height: 70,

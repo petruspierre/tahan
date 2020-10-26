@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
   Image,
   Alert,
+  TextInput,
 } from 'react-native';
 import { AntDesign as Icon, Entypo } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -36,6 +37,11 @@ const TopicInfo = () => {
   const [likes, setLikes] = useState(0);
 
   const [comments, setComments] = useState([]);
+  const [commentText, setCommentText] = useState('');
+  const [creatingComment, setCreatingComment] = useState(false);
+
+  const commentInput = useRef(null);
+  const scroll = useRef(null);
 
   const { user } = useAuth();
 
@@ -97,6 +103,15 @@ const TopicInfo = () => {
     }
   }
 
+  function handleCreateComment() {}
+
+  function handleStartComment() {
+    setCreatingComment(true);
+    setTimeout(() => {
+      scroll.current.scrollToEnd();
+    }, 1000);
+  }
+
   async function handleDeleteComment(id) {
     try {
       await api.delete(`/posts/comments/${id}`);
@@ -138,9 +153,10 @@ const TopicInfo = () => {
   return (
     <>
       <ScrollView
+        ref={scroll}
         style={styles.container}
         showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps="always"
+        keyboardShouldPersistTaps="never"
         contentContainerStyle={styles.contentContainer}
       >
         <ErrorModal
@@ -210,9 +226,9 @@ const TopicInfo = () => {
           <Text style={styles.mediumText}>Comentários</Text>
           <View style={styles.commentsDivider} />
 
-          {!loadingComments && (
-            <View style={styles.commentList}>
-              {comments.map((comment) => (
+          <View style={styles.commentList}>
+            {!loadingComments &&
+              comments.map((comment) => (
                 <View
                   key={String(comment.id)}
                   style={[styles.comment, lightShadow]}
@@ -237,10 +253,35 @@ const TopicInfo = () => {
                   <Text style={styles.commentText}>{comment.text}</Text>
                 </View>
               ))}
-            </View>
-          )}
+            {creatingComment && (
+              <View style={[styles.createComment, lightShadow]}>
+                <TextInput
+                  ref={commentInput}
+                  style={styles.commentText}
+                  value={commentText}
+                  onChangeText={setCommentText}
+                  multiline
+                  autoFocus
+                />
+                <View style={styles.creatingButtons}>
+                  <RectButton
+                    onPress={handleCreateComment}
+                    style={styles.creatingButton}
+                  >
+                    <Text style={styles.creatingButtonText}>Enviar</Text>
+                  </RectButton>
+                  <RectButton
+                    onPress={() => setCommentText('')}
+                    style={[styles.creatingButton, { marginLeft: 16 }]}
+                  >
+                    <Text style={styles.creatingButtonText}>Limpar</Text>
+                  </RectButton>
+                </View>
+              </View>
+            )}
+          </View>
 
-          <RectButton style={styles.commentButton}>
+          <RectButton style={styles.commentButton} onPress={handleStartComment}>
             <Text style={styles.buttonText}>Comentar</Text>
           </RectButton>
         </View>

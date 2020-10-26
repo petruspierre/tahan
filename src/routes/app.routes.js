@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import Svg, { Circle, Path } from 'react-native-svg';
-import { TouchableOpacity, View, Keyboard } from 'react-native';
+import { TouchableOpacity, View, Keyboard, Dimensions } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import Carousel from 'react-native-snap-carousel';
 
 import Home from '../pages/Home';
 import Quizzes from '../pages/Quizzes';
@@ -84,8 +85,12 @@ function TopicsIcon({ fill }) {
   );
 }
 
+let lastIndex = 2;
+
 function TabBar({ state, descriptors, navigation }) {
   const [tabBarHeight, setTabBarHeight] = useState(100);
+
+  const carousel = useRef(null);
 
   useEffect(() => {
     Keyboard.addListener('keyboardDidShow', keyboardDidShow);
@@ -96,6 +101,11 @@ function TabBar({ state, descriptors, navigation }) {
       Keyboard.removeListener('keyboardDidHide', keyboardDidHide);
     };
   }, []);
+
+  if (carousel.current && lastIndex !== state.index) {
+    carousel.current.snapToItem(state.index);
+    lastIndex = state.index;
+  }
 
   const keyboardDidShow = () => {
     setTabBarHeight(0);
@@ -114,50 +124,59 @@ function TabBar({ state, descriptors, navigation }) {
           backgroundColor: '#E4E0E0',
         }}
       >
-        {state.routes.map((route, index) => {
-          const { options } = descriptors[route.key];
+        <Carousel
+          ref={carousel}
+          data={state.routes}
+          renderItem={({ item: route, index }) => {
+            const { options } = descriptors[route.key];
 
-          const isFocused = state.index === index;
+            const isFocused = state.index === index;
 
-          const icon = options.tabBarIcon;
+            const icon = options.tabBarIcon;
 
-          const onPress = () => {
-            const event = navigation.emit({
-              type: 'tabPress',
-              target: route.key,
-              canPreventDefault: true,
-            });
+            const onPress = () => {
+              const event = navigation.emit({
+                type: 'tabPress',
+                target: route.key,
+                canPreventDefault: true,
+              });
 
-            if (!isFocused && !event.defaultPrevented) {
-              Keyboard.dismiss();
-              navigation.navigate(route.name);
+              if (!isFocused && !event.defaultPrevented) {
+                Keyboard.dismiss();
+                navigation.navigate(route.name);
+              }
+            };
+
+            if (tabBarHeight > 0) {
+              return (
+                <TouchableOpacity
+                  activeOpacity={0.6}
+                  accessibilityRole="button"
+                  accessibilityStates={isFocused ? ['selected'] : []}
+                  accessibilityLabel={options.tabBarAccessibilityLabel}
+                  testID={options.tabBarTestID}
+                  onPress={onPress}
+                  key={String(route.key)}
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginBottom: 18,
+                  }}
+                >
+                  {!isFocused
+                    ? icon
+                    : React.cloneElement(icon, { fill: '#FF3358' })}
+                </TouchableOpacity>
+              );
             }
-          };
-
-          if (tabBarHeight > 0) {
-            return (
-              <TouchableOpacity
-                accessibilityRole="button"
-                accessibilityStates={isFocused ? ['selected'] : []}
-                accessibilityLabel={options.tabBarAccessibilityLabel}
-                testID={options.tabBarTestID}
-                onPress={onPress}
-                key={String(route.key)}
-                style={{
-                  flex: 1,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  marginBottom: 18,
-                }}
-              >
-                {!isFocused
-                  ? icon
-                  : React.cloneElement(icon, { fill: '#FF3358' })}
-              </TouchableOpacity>
-            );
-          }
-          return null;
-        })}
+            return null;
+          }}
+          sliderWidth={Dimensions.get('window').width}
+          itemWidth={100}
+          scrollEnabled={false}
+          firstItem={2}
+        />
       </View>
       {tabBarHeight > 0 && (
         <View style={{ width: '100%', alignItems: 'center' }}>
